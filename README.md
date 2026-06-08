@@ -10,7 +10,7 @@ All logic is encapsulated within its own dedicated classes, integrating only req
 
 - **Dolby Vision Stripping:** Removes the Dolby Vision layer entirely from videos while keeping the underlying HDR10 or HDR10+ layers intact.
 
-- **HDR10+ Stripping:** Removes the HDR10+ layer from Dolby Vision videos (mainly to resolve black screen playback bug on MediaTek MT8698D devices).
+- **HDR10+ Stripping:** Removes the HDR10+ layer from Dolby Vision videos (mainly to resolve black screen playback bug on MediaTek MT8696D devices like the firestick 4k).
 
 # Example
 
