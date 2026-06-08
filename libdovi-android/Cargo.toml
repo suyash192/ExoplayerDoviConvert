@@ -1,0 +1,13 @@
+[package]
+name = "dovi-android"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# The core Dolby Vision library
+dolby_vision = { version = "3.3" }
+# JNI bindings for Rust
+jni = { version = "0.21", default-features = false }
