@@ -1,4 +1,8 @@
-This repository is an example project demonstrating HDR bitstreams manipulation on the fly using libdovi.
+This repository is an example project demonstrating HDR bitstreams manipulation on the fly in ExoPlayer using libdovi.
+
+The project uses jni-rs bindings for libdovi.
+
+All logic is encapsulated within its own dedicated classes, integrating only requires setting a new `MediaSourceFactory` in the ExoPlayer instance.
 
 # Highlights
 
@@ -7,6 +11,8 @@ This repository is an example project demonstrating HDR bitstreams manipulation 
 - Dolby Vision Stripping: Removes the Dolby Vision layer entirely from videos while keeping the underlying HDR10 or HDR10+ layers intact.
 
 - HDR10+ Stripping: Removes the HDR10+ layer from Dolby Vision videos (mainly to resolve black screen playback bug on MediaTek MT8698D devices).
+
+# Example
 
 ```Kotlin
 // Transformation rules
