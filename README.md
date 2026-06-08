@@ -35,3 +35,7 @@ val player = ExoPlayer.Builder(context)
         playWhenReady = true
     }
 ```
+
+## AI Disclosure
+
+AI has been used in the development of this project, but except for some Android framework classes most of it has been understood by me.
