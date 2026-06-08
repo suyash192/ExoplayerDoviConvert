@@ -38,4 +38,4 @@ val player = ExoPlayer.Builder(context)
 
 ## AI Disclosure
 
-AI has been used in the development of this project, but except for some Android framework classes most of it has been understood by me.
+AI has been used in the development of this project, but except for some Android framework classes the rest of it (especially the core logic) has been understood by me.
