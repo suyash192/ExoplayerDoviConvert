@@ -1,5 +1,7 @@
 This repository is an example project demonstrating HDR bitstreams manipulation on the fly using libdovi.
 
+The project uses jni-rs bindings for libdovi.
+
 # Highlights
 
 - Dolby Vision Profile 7 to Profile 8 Conversion: Converts Profile 7 FEL and MEL videos to Profile 8 by discarding the Enhancement Layer, if any.
