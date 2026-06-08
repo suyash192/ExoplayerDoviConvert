@@ -3,6 +3,7 @@ package com.suyashbelekar.exoplayerdoviconvert
 import androidx.media3.common.C
 import androidx.media3.common.DataReader
 import androidx.media3.common.Format
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.extractor.DefaultExtractorsFactory
@@ -28,13 +29,20 @@ class BitstreamModifyingTrackOutput(
 ) : TrackOutput {
     private val frameBuffer = ByteArrayOutputStream()
 
+    private var isDolbyVision = false
+
     override fun format(format: Format) {
+        isDolbyVision = format.sampleMimeType == MimeTypes.VIDEO_DOLBY_VISION
         delegate.format(format)
     }
 
     override fun sampleData(
         input: DataReader, length: Int, allowEndOfInput: Boolean, sampleDataPart: Int
     ): Int {
+        if (!isDolbyVision) {
+            return delegate.sampleData(input, length, allowEndOfInput, sampleDataPart)
+        }
+
         val buffer = ByteArray(length)
         val bytesRead = input.read(buffer, 0, length)
         if (bytesRead == -1) {
@@ -46,6 +54,11 @@ class BitstreamModifyingTrackOutput(
     }
 
     override fun sampleData(data: ParsableByteArray, length: Int, sampleDataPart: Int) {
+        if (!isDolbyVision) {
+            delegate.sampleData(data, length, sampleDataPart)
+            return
+        }
+
         val bytes = ByteArray(length)
         data.readBytes(bytes, 0, length)
         frameBuffer.write(bytes)
@@ -54,6 +67,11 @@ class BitstreamModifyingTrackOutput(
     override fun sampleMetadata(
         timeUs: Long, flags: Int, size: Int, offset: Int, cryptoData: TrackOutput.CryptoData?
     ) {
+        if (!isDolbyVision) {
+            delegate.sampleMetadata(timeUs, flags, size, offset, cryptoData)
+            return
+        }
+
         val fullFrameBytes = frameBuffer.toByteArray()
         frameBuffer.reset()
 
@@ -99,7 +117,7 @@ class BitstreamModifyingExtractorOutput(
 // ============================================================================
 @UnstableApi
 class BitstreamTransformingExtractorsFactory(
-    private val transformStrategy: TransformStrategy,
+    transformStrategy: TransformStrategy,
     private val defaultFactory: ExtractorsFactory = DefaultExtractorsFactory()
 ) : ExtractorsFactory {
     private val videoFrameTransformer = VideoFrameTransformer(transformStrategy)
