@@ -20,6 +20,10 @@ class VideoFrameTransformer(
             firstFrameDone = true
         }
 
+        if (naluTransformers.isEmpty()) {
+            return frameData
+        }
+
         val outputStream = ByteArrayOutputStream()
 
         NaluUtils.parseHevcNalus(frameData) { type, data, startCodeSize: Int ->
