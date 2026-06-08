@@ -1,4 +1,4 @@
-This repository is an example project demonstrating HDR bitstreams manipulation on the fly in ExoPlayer using libdovi.
+This repository is an example project demonstrating Dolby Vision bitstream manipulation on the fly in ExoPlayer using libdovi.
 
 The project uses jni-rs bindings for libdovi.
 
