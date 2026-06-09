@@ -1,4 +1,4 @@
-package com.suyashbelekar.libdovi
+package com.suyashbelekar.exoplayerhdrutils.libdovi
 
 class LibDovi {
     init {
@@ -17,5 +17,3 @@ class LibDovi {
 
     external fun getElType(rpuPtr: Long): String?
 }
-
-val libDovi = LibDovi()

@@ -1,4 +1,4 @@
-package com.suyashbelekar.exoplayerdoviconvert.video
+package com.suyashbelekar.exoplayerhdrutils.video
 
 object NaluUtils {
     fun parseHevcNalus(

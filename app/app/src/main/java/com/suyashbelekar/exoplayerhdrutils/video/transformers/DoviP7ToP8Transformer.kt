@@ -1,6 +1,6 @@
-package com.suyashbelekar.exoplayerdoviconvert.video.transformers
+package com.suyashbelekar.exoplayerhdrutils.video.transformers
 
-import com.suyashbelekar.libdovi.libDovi
+import com.suyashbelekar.exoplayerhdrutils.libdovi.LibDovi
 
 /**
  * Converts Dolby Vision Profile 7 NAL units to Profile 8.
@@ -11,6 +11,8 @@ import com.suyashbelekar.libdovi.libDovi
  * @throws IllegalArgumentException if libdovi fails to parse, convert, or rewrite the NAL unit.
  */
 class DoviP7ToP8Transformer : NaluTransformer {
+    private val libDovi = LibDovi()
+
     override fun transformNalu(type: Int, data: ByteArray): ByteArray {
         if (type != 62) {
             return data

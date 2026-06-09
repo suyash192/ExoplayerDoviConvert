@@ -1,12 +1,14 @@
-package com.suyashbelekar.exoplayerdoviconvert.video.transformers
+package com.suyashbelekar.exoplayerhdrutils.video.transformers
 
-import com.suyashbelekar.exoplayerdoviconvert.video.NaluUtils
-import com.suyashbelekar.libdovi.libDovi
+import com.suyashbelekar.exoplayerhdrutils.libdovi.LibDovi
+import com.suyashbelekar.exoplayerhdrutils.video.NaluUtils
 import java.io.ByteArrayOutputStream
 
 class VideoFrameTransformer(
     private val transformStrategy: TransformStrategy
 ) {
+    private val libDovi = LibDovi()
+
     private var firstFrameDone = false
 
     private val naluTransformers = mutableListOf<NaluTransformer>()

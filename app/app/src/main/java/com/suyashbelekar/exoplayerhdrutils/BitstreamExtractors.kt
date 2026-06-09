@@ -1,4 +1,4 @@
-package com.suyashbelekar.exoplayerdoviconvert
+package com.suyashbelekar.exoplayerhdrutils
 
 import androidx.media3.common.C
 import androidx.media3.common.DataReader
@@ -14,14 +14,11 @@ import androidx.media3.extractor.ExtractorsFactory
 import androidx.media3.extractor.PositionHolder
 import androidx.media3.extractor.SeekMap
 import androidx.media3.extractor.TrackOutput
-import com.suyashbelekar.exoplayerdoviconvert.video.transformers.TransformStrategy
-import com.suyashbelekar.exoplayerdoviconvert.video.transformers.VideoFrameTransformer
+import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
+import com.suyashbelekar.exoplayerhdrutils.video.transformers.VideoFrameTransformer
 import java.io.ByteArrayOutputStream
 import java.io.EOFException
 
-// ============================================================================
-// 1. The Custom TrackOutput (Core NAL Modification Logic)
-// ============================================================================
 @UnstableApi
 class BitstreamModifyingTrackOutput(
     private val delegate: TrackOutput,
@@ -85,9 +82,6 @@ class BitstreamModifyingTrackOutput(
     }
 }
 
-// ============================================================================
-// 2. The Custom ExtractorOutput Wrapper
-// ============================================================================
 @UnstableApi
 class BitstreamModifyingExtractorOutput(
     private val delegate: ExtractorOutput,
@@ -112,14 +106,11 @@ class BitstreamModifyingExtractorOutput(
     }
 }
 
-// ============================================================================
-// 3. The Custom ExtractorsFactory Wrapper
-// ============================================================================
 @UnstableApi
 class BitstreamTransformingExtractorsFactory(
     transformStrategy: TransformStrategy,
     private val defaultFactory: ExtractorsFactory = DefaultExtractorsFactory()
-) : ExtractorsFactory {
+    ) : ExtractorsFactory {
     private val videoFrameTransformer = VideoFrameTransformer(transformStrategy)
 
     override fun createExtractors(): Array<Extractor> {
