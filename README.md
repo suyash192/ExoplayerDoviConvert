@@ -63,7 +63,13 @@ All credit goes to [quietvoid](https://github.com/quietvoid) for creating and
 maintaining [libdovi](https://github.com/quietvoid/dovi_tool), which is the core of this
 project's Dolby Vision parsing and processing capabilities.
 
-## AI Disclosure
+# AI Disclosure
 
 AI has been used in the development of this project, but except for some Android framework classes
 the rest of it (especially the core logic) has been understood by me.
+
+# Disclaimer
+
+This library is provided "as-is" without any warranty of any kind, either expressed or implied. By
+using this library, you acknowledge that I assume no liability for any bugs, app crashes, or
+unexpected behavior resulting from its use. (See the MIT License for full details).
