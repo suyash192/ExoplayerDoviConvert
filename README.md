@@ -51,6 +51,15 @@ val player = ExoPlayer.Builder(context)
     }
 ```
 
+Existing extractors factory can be passed as a delegate, if needed.
+
+```Kotlin
+val mediaSourceFactory = DefaultMediaSourceFactory(
+  context,
+  BitstreamTransformingExtractorsFactory(transformStrategy, existingExtractorsFactory)
+)
+```
+
 ## Prerequisites & Compatibility
 
 - **Minimum SDK:** 23
