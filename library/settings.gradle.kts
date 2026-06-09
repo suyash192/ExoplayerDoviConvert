@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ExoplayerDoviConvert"
+rootProject.name = "ExoplayerHdrUtils"
 include(":app")
  
