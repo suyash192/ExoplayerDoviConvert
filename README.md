@@ -6,11 +6,11 @@ All logic is encapsulated within its own dedicated classes, integrating only req
 
 # Highlights
 
-- **Dolby Vision Profile 7 to Profile 8 Conversion:** Converts Profile 7 FEL and MEL videos to Profile 8 (discards the Enhancement Layer in FEL).
+- **Dolby Vision Profile 7 to Profile 8 Conversion:** Can convert Profile 7 FEL and MEL videos to Profile 8 (discards the Enhancement Layer in FEL).
 
-- **Dolby Vision Stripping:** Removes the Dolby Vision layer entirely from videos while keeping the underlying HDR10 or HDR10+ layers intact.
+- **Dolby Vision Stripping:** Can remove the Dolby Vision layer entirely from videos while keeping the underlying HDR10 or HDR10+ layers intact.
 
-- **HDR10+ Stripping:** Removes the HDR10+ layer from Dolby Vision videos (mainly to resolve black screen playback bug on MediaTek MT8698D devices).
+- **HDR10+ Stripping:** Can remove the HDR10+ layer from Dolby Vision videos (mainly to resolve black screen playback bug on MediaTek MT8696D devices like the firestick 4k).
 
 # Example
 
@@ -35,3 +35,7 @@ val player = ExoPlayer.Builder(context)
         playWhenReady = true
     }
 ```
+
+## AI Disclosure
+
+AI has been used in the development of this project, but except for some Android framework classes the rest of it (especially the core logic) has been understood by me.
