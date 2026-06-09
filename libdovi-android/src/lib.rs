@@ -7,7 +7,7 @@ use dolby_vision::rpu::rpu_data_nlq::DoviELType;
 
 /// Bindings for dovi_parse_unspec62_nalu
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_parseUnspec62Nalu(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_parseUnspec62Nalu(
     env: JNIEnv,
     _class: JClass,
     rpu_bytes: JByteArray,
@@ -28,7 +28,7 @@ pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_parseUnspec62Nalu(
 
 /// Bindings for dovi_convert_rpu_with_mode
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_convertRpuWithMode(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_convertRpuWithMode(
     _env: JNIEnv,
     _class: JClass,
     rpu_ptr: jlong,
@@ -48,7 +48,7 @@ pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_convertRpuWithMode
 
 /// Bindings for dovi_write_unspec62_nalu
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_writeUnspec62Nalu<'local>(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_writeUnspec62Nalu<'local>(
     env: JNIEnv<'local>,
     _class: JClass<'local>,
     rpu_ptr: jlong,
@@ -70,7 +70,7 @@ pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_writeUnspec62Nalu<
 
 /// Bindings for dovi_rpu_free
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_freeRpu(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_freeRpu(
     _env: JNIEnv,
     _class: JClass,
     rpu_ptr: jlong,
@@ -84,7 +84,7 @@ pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_freeRpu(
 
 /// Bindings to retrieve dovi_profile from the rpu
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_getDoviProfile(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_getDoviProfile(
     _env: JNIEnv,
     _class: JClass,
     rpu_ptr: jlong,
@@ -100,7 +100,7 @@ pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_getDoviProfile(
 
 /// Bindings to retrieve el_type from the rpu
 #[unsafe(no_mangle)]
-pub extern "system" fn Java_com_suyashbelekar_libdovi_LibDovi_getElType<'local>(
+pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_getElType<'local>(
     env: JNIEnv<'local>,
     _class: JClass<'local>,
     rpu_ptr: jlong,
