@@ -24,7 +24,7 @@ Integrating only requires setting a new `HdrCompatMediaSourceFactory` in your Ex
 ## Installation
 
 ```kts
-implementation("com.suyashbelekar:exoplayerhdrutils:0.1.0")
+implementation("com.suyashbelekar:exoplayerhdrutils:0.2.0")
 ```
 
 ## Usage
