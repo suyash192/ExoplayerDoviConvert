@@ -1,4 +1,4 @@
-package com.suyashbelekar.exoplayerhdrutils.exoplayer
+package com.suyashbelekar.exoplayerhdrutils.exoplayer.source
 
 import android.content.Context
 import androidx.media3.common.MediaItem

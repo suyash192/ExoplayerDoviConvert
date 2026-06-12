@@ -1,4 +1,4 @@
-package com.suyashbelekar.exoplayerhdrutils.exoplayer
+package com.suyashbelekar.exoplayerhdrutils.exoplayer.source
 
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
