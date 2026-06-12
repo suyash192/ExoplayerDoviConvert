@@ -2,7 +2,7 @@
 agp = "9.2.1"
 coreKtx = "1.10.1"
 appcompat = "1.6.1"
-exoplayerhdrutils = "0.1.0"
+exoplayerhdrutils = "0.2.0"
 kotlin = "2.2.10"
 composeBom = "2024.09.00"
 tvFoundation = "1.0.0-alpha07"

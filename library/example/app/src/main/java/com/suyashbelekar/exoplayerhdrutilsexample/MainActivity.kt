@@ -14,15 +14,14 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
-import com.suyashbelekar.exoplayerhdrutilsexample.ui.theme.ExoplayerHdrUtilsExampleTheme
-import com.suyashbelekar.exoplayerhdrutils.extractor.BitstreamTransformingExtractorsFactory
+import com.suyashbelekar.exoplayerhdrutils.exoplayer.HdrCompatMediaSourceFactory
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.DoviStrategy
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.Hdr10PlusStrategy
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
+import com.suyashbelekar.exoplayerhdrutilsexample.ui.theme.ExoplayerHdrUtilsExampleTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalTvMaterial3Api::class)
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     SimpleVideoPlayer(
                         // Change to actual URL
-                        "http://192.168.68.107:3000/input-120s-dvp7fel.mkv"
+                        "http://192.168.1.100:3000/input.mkv"
                     )
                 }
             }
@@ -56,13 +55,8 @@ fun SimpleVideoPlayer(videoUrl: String) {
             doviHdr10Plus = Hdr10PlusStrategy.DISCARD // Or Hdr10PlusStrategy.KEEP to keep it unchanged
         )
 
-        val mediaSourceFactory = DefaultMediaSourceFactory(
-            context,
-            BitstreamTransformingExtractorsFactory(transformStrategy)
-        )
-
         ExoPlayer.Builder(context)
-            .setMediaSourceFactory(mediaSourceFactory)
+            .setMediaSourceFactory(HdrCompatMediaSourceFactory(context, transformStrategy))
             .build().apply {
                 setMediaItem(MediaItem.fromUri(videoUrl))
                 prepare()
