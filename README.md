@@ -8,7 +8,7 @@ libdovi.
 
 The project uses jni-rs bindings for libdovi.
 
-Integrating only requires setting a new `MediaSourceFactory` in your ExoPlayer instance.
+Integrating only requires setting a new `HdrCompatMediaSourceFactory` in your ExoPlayer instance.
 
 ## Highlights
 
@@ -37,13 +37,8 @@ val transformStrategy = TransformStrategy(
     doviHdr10Plus = Hdr10PlusStrategy.DISCARD // Or Hdr10PlusStrategy.KEEP to keep it unchanged
 )
 
-val mediaSourceFactory = DefaultMediaSourceFactory(
-    context,
-    BitstreamTransformingExtractorsFactory(transformStrategy)
-)
-
 val player = ExoPlayer.Builder(context)
-    .setMediaSourceFactory(mediaSourceFactory)
+    .setMediaSourceFactory(HdrCompatMediaSourceFactory(context, transformStrategy))
     .build().apply {
         setMediaItem(MediaItem.fromUri(videoUrl))
         prepare()
@@ -51,13 +46,10 @@ val player = ExoPlayer.Builder(context)
     }
 ```
 
-Existing extractors factory can be passed as a delegate, if needed.
+Any existing `MediaSourceFactory` can be passed as a delegate, if needed.
 
 ```Kotlin
-val mediaSourceFactory = DefaultMediaSourceFactory(
-  context,
-  BitstreamTransformingExtractorsFactory(transformStrategy, existingExtractorsFactory)
-)
+HdrCompatMediaSourceFactory(existingMediaSourceFactory, transformStrategy)
 ```
 
 ## Prerequisites & Compatibility
