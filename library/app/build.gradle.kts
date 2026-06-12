@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "0.1.0"
+version = "0.2.0"
 group = "com.suyashbelekar.exoplayerhdrutils"
 
 android {
@@ -32,7 +32,7 @@ dependencies {
 }
 
 mavenPublishing {
-    coordinates("com.suyashbelekar", "exoplayerhdrutils", "0.1.0")
+    coordinates("com.suyashbelekar", "exoplayerhdrutils", "0.2.0")
 
     pom {
         name.set("ExoPlayer HDR Utils")
