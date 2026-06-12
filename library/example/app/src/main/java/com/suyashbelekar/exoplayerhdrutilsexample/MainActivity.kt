@@ -17,7 +17,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
-import com.suyashbelekar.exoplayerhdrutils.exoplayer.HdrCompatMediaSourceFactory
+import com.suyashbelekar.exoplayerhdrutils.exoplayer.source.HdrCompatMediaSourceFactory
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.DoviStrategy
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.Hdr10PlusStrategy
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
