@@ -18,21 +18,7 @@ class DoviP7ToP8Transformer : NaluTransformer {
             return data
         }
 
-        val rpuPtr = libDovi.parseUnspec62Nalu(data)
-        if (rpuPtr == 0L) {
-            throw IllegalArgumentException("Failed to parse Dolby Vision RPU.")
-        }
-
-        val result = libDovi.convertRpuWithMode(rpuPtr, 2)
-        if (!result) {
-            throw IllegalArgumentException("Failed to convert Dolby Vision RPU.")
-        }
-
-        val newNalu = libDovi.writeUnspec62Nalu(rpuPtr)
-            ?: throw IllegalArgumentException("Failed to write Dolby Vision RPU.")
-
-        libDovi.freeRpu(rpuPtr)
-
-        return newNalu
+        return libDovi.convertNaluToP8(data)
+            ?: throw IllegalArgumentException("Failed to convert Dolby Vision RPU.")
     }
 }

@@ -71,13 +71,13 @@ class VideoFrameTransformer(
 
         NaluUtils.parseHevcNalus(frameData) { naluType, naluData, _ ->
             if (naluType == 62) {
-                val rpuPtr = libDovi.parseUnspec62Nalu(naluData)
-                if (rpuPtr == 0L) {
-                    throw IllegalArgumentException("Failed to parse Dolby Vision RPU.")
+                val doviInfo = libDovi.getDoviInfo(naluData)
+                doviProfile = doviInfo[0]
+                elType = when (doviInfo[1]) {
+                    2 -> ElType.FEL
+                    1 -> ElType.MEL
+                    else -> ElType.NONE
                 }
-
-                doviProfile = libDovi.getDoviProfile(rpuPtr)
-                elType = ElType.valueOf(libDovi.getElType(rpuPtr) ?: "NONE")
             } else if (naluType == 39 && containsHdr10PlusSignature(naluData)) {
                 hasHdr10Plus = true
             }
