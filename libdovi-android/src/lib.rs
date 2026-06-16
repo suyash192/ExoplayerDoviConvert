@@ -1,9 +1,10 @@
 use dolby_vision::rpu::dovi_rpu::DoviRpu;
 use jni::objects::{JByteArray, JByteBuffer, JClass, JIntArray};
-use jni::sys::{jboolean, jbyteArray, jint, jintArray, jlong, jstring};
+use jni::sys::{jboolean, jbyteArray, jint, jintArray};
 use jni::JNIEnv;
 
 use dolby_vision::rpu::rpu_data_nlq::DoviELType;
+use memchr::memmem;
 
 /// Bindings for dovi_convert_nalu_to_p8
 #[unsafe(no_mangle)]
@@ -100,19 +101,25 @@ pub struct NaluInfo {
 /// Helper function to find the next start code and payload start indices.
 #[inline]
 fn find_start_code(data: &[u8], offset: usize) -> Option<(usize, usize)> {
-    let mut i = offset.max(2);
-    while i < data.len() - 1 {
-        if data[i] == 1 && data[i - 1] == 0 && data[i - 2] == 0 {
-            let start_code_idx = if i >= 3 && data[i - 3] == 0 {
-                i - 3 // 4-byte start code (0 0 0 1)
-            } else {
-                i - 2 // 3-byte start code (0 0 1)
-            };
-            return Some((start_code_idx, i + 1));
-        }
-        i += 1;
+    if offset >= data.len() {
+        return None;
     }
-    None
+
+    let search_slice = &data[offset..];
+
+    // memmem::find searches for the 3-byte sequence using SIMD
+    let pos = memmem::find(search_slice, b"\x00\x00\x01")?;
+
+    let match_idx = offset + pos;
+
+    // Check backwards for the optional 4th leading zero (0x00 00 00 01)
+    let start_idx = if match_idx > 0 && data[match_idx - 1] == 0 {
+        match_idx - 1
+    } else {
+        match_idx
+    };
+
+    Some((start_idx, match_idx + 3))
 }
 
 /// Scans the provided byte slice starting at `offset` to find the next complete NALU.
