@@ -8,6 +8,7 @@ local.properties
 .idea/navEditor.xml
 .idea/assetWizardSettings.xml
 .DS_Store
+app/libs
 build
 captures
 .externalNativeBuild
