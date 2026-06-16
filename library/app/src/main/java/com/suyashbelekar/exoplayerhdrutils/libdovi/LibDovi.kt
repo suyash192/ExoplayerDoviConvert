@@ -7,17 +7,9 @@ class LibDovi {
         System.loadLibrary("dovi_android")
     }
 
-    external fun parseUnspec62Nalu(rpuBytes: ByteArray): Long
+    external fun convertNaluToP8(rpuBytes: ByteArray): ByteArray?
 
-    external fun convertRpuWithMode(rpuPtr: Long, mode: Int): Boolean
-
-    external fun writeUnspec62Nalu(rpuPtr: Long): ByteArray?
-
-    external fun freeRpu(rpuPtr: Long)
-
-    external fun getDoviProfile(rpuPtr: Long): Int
-
-    external fun getElType(rpuPtr: Long): String?
+    external fun getDoviInfo(rpuBytes: ByteArray): IntArray
 
     private external fun getRpuFrameInfo(rpuBuffer: ByteBuffer, frameSize: Int): IntArray?
 
