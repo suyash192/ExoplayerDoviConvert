@@ -5,21 +5,18 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.decoder.DecoderInputBuffer
 import androidx.media3.exoplayer.FormatHolder
 import androidx.media3.exoplayer.source.SampleStream
+import com.suyashbelekar.exoplayerhdrutils.video.transformers.HevcFrameTransformer
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
-import com.suyashbelekar.exoplayerhdrutils.video.transformers.VideoFrameTransformer
 import java.nio.ByteBuffer
 
 @UnstableApi
 class HdrCompatSampleStream(
-    private val delegate: SampleStream,
-    transformStrategy: TransformStrategy
+    private val delegate: SampleStream, transformStrategy: TransformStrategy
 ) : SampleStream by delegate {
-    private val videoFrameTransformer = VideoFrameTransformer(transformStrategy)
+    private val videoFrameTransformer = HevcFrameTransformer(transformStrategy)
 
     override fun readData(
-        formatHolder: FormatHolder,
-        buffer: DecoderInputBuffer,
-        readFlags: Int
+        formatHolder: FormatHolder, buffer: DecoderInputBuffer, readFlags: Int
     ): Int {
         val result = delegate.readData(formatHolder, buffer, readFlags)
 
@@ -31,20 +28,18 @@ class HdrCompatSampleStream(
     }
 
     private fun onBuffer(buffer: DecoderInputBuffer) {
-        val byteBuffer: ByteBuffer? = buffer.data
-        if (byteBuffer != null) {
-            val frameSize = byteBuffer.position()
+        val byteBuffer: ByteBuffer = buffer.data ?: return
 
-            byteBuffer.flip()
-            val frameData = ByteArray(frameSize)
-            byteBuffer.get(frameData)
+        val frameSize = byteBuffer.position()
 
-            val transformedData = videoFrameTransformer.transformFrame(frameData)
+        // Add 10 KB space in buffer just in case if conversion increases the frame size
+        buffer.ensureSpaceForWrite(frameSize + (1024 * 10))
 
-            byteBuffer.clear()
-            byteBuffer.put(transformedData)
-            byteBuffer.position(transformedData.size)
-        }
+        // Get the new buffer in case it was created
+        val newByteBuffer: ByteBuffer = buffer.data ?: return
+
+        val newSize = videoFrameTransformer.transformFrame(newByteBuffer, frameSize)
+
+        byteBuffer.position(newSize)
     }
 }
-

@@ -1,5 +1,6 @@
 package com.suyashbelekar.exoplayerhdrutils.video.transformers
 
+import com.suyashbelekar.exoplayerhdrutils.libdovi.ElType
 import com.suyashbelekar.exoplayerhdrutils.libdovi.LibDovi
 import com.suyashbelekar.exoplayerhdrutils.video.NaluUtils
 import java.io.ByteArrayOutputStream
@@ -114,18 +115,3 @@ class VideoFrameTransformer(
     }
 }
 
-private enum class ElType {
-    MEL, FEL, NONE
-}
-
-data class TransformStrategy(
-    val doviP7Fel: DoviStrategy, val doviP7Mel: DoviStrategy, val doviHdr10Plus: Hdr10PlusStrategy
-)
-
-enum class DoviStrategy {
-    KEEP, CONVERT_TO_P8, DISCARD
-}
-
-enum class Hdr10PlusStrategy {
-    KEEP, DISCARD
-}
