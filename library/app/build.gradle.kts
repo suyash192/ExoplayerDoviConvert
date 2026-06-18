@@ -12,6 +12,7 @@ android {
 
     defaultConfig {
         minSdk = 23
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -29,6 +30,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     implementation(libs.androidx.media3.exoplayer)
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
 }
 
 mavenPublishing {

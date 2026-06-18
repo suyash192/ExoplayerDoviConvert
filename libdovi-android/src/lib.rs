@@ -186,6 +186,8 @@ pub extern "system" fn Java_com_suyashbelekar_exoplayerhdrutils_libdovi_LibDovi_
             } else if needs_dovi_strip {
                 add_hevc_filler(slice, nalu.payload_idx, nalu.end_idx);
                 offset = nalu.end_idx;
+            } else {
+                offset = nalu.end_idx;
             }
         } else if nalu.nalu_type == 39 && needs_hdr10plus_strip_bool {
             add_hevc_filler(slice, nalu.payload_idx, nalu.end_idx);
