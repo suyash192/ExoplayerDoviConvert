@@ -8,15 +8,12 @@ import androidx.media3.extractor.ExtractorOutput
 import androidx.media3.extractor.ExtractorsFactory
 import androidx.media3.extractor.PositionHolder
 import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
-import com.suyashbelekar.exoplayerhdrutils.video.transformers.VideoFrameTransformer
 
 @UnstableApi
 class BitstreamTransformingExtractorsFactory(
-    transformStrategy: TransformStrategy,
+    private val transformStrategy: TransformStrategy,
     private val defaultFactory: ExtractorsFactory = DefaultExtractorsFactory()
 ) : ExtractorsFactory {
-    private val videoFrameTransformer = VideoFrameTransformer(transformStrategy)
-
     override fun createExtractors(): Array<Extractor> {
         return defaultFactory.createExtractors().map { realExtractor ->
             object : Extractor {
@@ -26,7 +23,7 @@ class BitstreamTransformingExtractorsFactory(
                     realExtractor.init(
                         BitstreamModifyingExtractorOutput(
                             output,
-                            videoFrameTransformer
+                            transformStrategy
                         )
                     )
                 }
@@ -39,7 +36,6 @@ class BitstreamTransformingExtractorsFactory(
 
                 override fun release() {
                     realExtractor.release()
-                    videoFrameTransformer.clearContext()
                 }
             }
         }.toTypedArray()

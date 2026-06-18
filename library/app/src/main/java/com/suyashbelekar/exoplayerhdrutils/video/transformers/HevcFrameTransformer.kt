@@ -58,6 +58,10 @@ class HevcFrameTransformer(
             Transform.Needed(doviTransform, needsHdr10PlusStrip)
         }
     }
+
+    fun clearContext() {
+        transform = Transform.Unknown
+    }
 }
 
 private sealed class Transform {

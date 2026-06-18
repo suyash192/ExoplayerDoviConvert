@@ -7,10 +7,6 @@ class LibDovi {
         System.loadLibrary("dovi_android")
     }
 
-    external fun convertNaluToP8(rpuBytes: ByteArray): ByteArray?
-
-    external fun getDoviInfo(rpuBytes: ByteArray): IntArray
-
     private external fun getRpuFrameInfo(rpuBuffer: ByteBuffer, frameSize: Int): IntArray?
 
     fun getFrameInfo(frameBuffer: ByteBuffer, frameSize: Int): FrameInfo? {

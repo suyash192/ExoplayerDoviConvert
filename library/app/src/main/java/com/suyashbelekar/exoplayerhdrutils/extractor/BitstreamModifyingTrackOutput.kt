@@ -7,20 +7,32 @@ import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.ParsableByteArray
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.extractor.TrackOutput
-import com.suyashbelekar.exoplayerhdrutils.video.transformers.VideoFrameTransformer
-import java.io.ByteArrayOutputStream
+import com.suyashbelekar.exoplayerhdrutils.video.transformers.HevcFrameTransformer
+import com.suyashbelekar.exoplayerhdrutils.video.transformers.TransformStrategy
 import java.io.EOFException
+import java.nio.ByteBuffer
 
 @UnstableApi
 class BitstreamModifyingTrackOutput(
     private val delegate: TrackOutput,
-    private val videoFrameTransformer: VideoFrameTransformer
+    transformStrategy: TransformStrategy
 ) : TrackOutput {
-    private val frameBuffer = ByteArrayOutputStream()
+    private val hevcFrameTransformer = HevcFrameTransformer(transformStrategy)
+
+    // To hold the frame, it will auto-expand if needed
+    private var buffer: ByteBuffer = ByteBuffer.allocateDirect(1024 * 1024)
+
+    // Reusable array to read from DataReader without allocating on every call
+    private var tempBuffer = ByteArray(4096)
+
+    // Reusable array and wrapper to pass the final transformed frame to ExoPlayer
+    private var frameOutputBuffer = ByteArray(1024 * 1024)
+    private val parsableByteArray = ParsableByteArray()
 
     private var isDolbyVision = false
 
     override fun format(format: Format) {
+        hevcFrameTransformer.clearContext()
         isDolbyVision = format.sampleMimeType == MimeTypes.VIDEO_DOLBY_VISION
         delegate.format(format)
     }
@@ -32,13 +44,17 @@ class BitstreamModifyingTrackOutput(
             return delegate.sampleData(input, length, allowEndOfInput, sampleDataPart)
         }
 
-        val buffer = ByteArray(length)
-        val bytesRead = input.read(buffer, 0, length)
+        tempBuffer = ensureCapacity(tempBuffer, length)
+        val bytesRead = input.read(tempBuffer, 0, length)
+
         if (bytesRead == -1) {
             if (allowEndOfInput) return C.RESULT_END_OF_INPUT
             throw EOFException()
         }
-        frameBuffer.write(buffer, 0, bytesRead)
+
+        buffer = ensureCapacity(buffer, buffer.position() + bytesRead)
+        buffer.put(tempBuffer, 0, bytesRead)
+
         return bytesRead
     }
 
@@ -48,9 +64,9 @@ class BitstreamModifyingTrackOutput(
             return
         }
 
-        val bytes = ByteArray(length)
-        data.readBytes(bytes, 0, length)
-        frameBuffer.write(bytes)
+        buffer = ensureCapacity(buffer, buffer.position() + length)
+        buffer.put(data.data, data.position, length)
+        data.skipBytes(length)
     }
 
     override fun sampleMetadata(
@@ -61,16 +77,47 @@ class BitstreamModifyingTrackOutput(
             return
         }
 
-        val fullFrameBytes = frameBuffer.toByteArray()
-        frameBuffer.reset()
+        // Read mode
+        buffer.flip()
+        val currentLength = buffer.remaining()
 
-        val modifiedBytes = videoFrameTransformer.transformFrame(fullFrameBytes)
+        // Transform the frame
+        val newSize = hevcFrameTransformer.transformFrame(buffer, currentLength)
 
-        val parsableByteArray = ParsableByteArray(modifiedBytes)
+        frameOutputBuffer = ensureCapacity(frameOutputBuffer, newSize)
+
+        // Extract to output array
+        buffer.position(0)
+        buffer.get(frameOutputBuffer, 0, newSize)
+
+        buffer.clear()
+
+        // Pass output
+        parsableByteArray.reset(frameOutputBuffer, newSize)
+
         delegate.sampleData(
-            parsableByteArray, modifiedBytes.size, TrackOutput.SAMPLE_DATA_PART_MAIN
+            parsableByteArray, newSize, TrackOutput.SAMPLE_DATA_PART_MAIN
         )
-        delegate.sampleMetadata(timeUs, flags, modifiedBytes.size, offset, cryptoData)
+        delegate.sampleMetadata(timeUs, flags, newSize, offset, cryptoData)
+    }
+
+    private fun ensureCapacity(currentBuffer: ByteBuffer, requiredCapacity: Int): ByteBuffer {
+        if (currentBuffer.capacity() >= requiredCapacity) {
+            return currentBuffer
+        }
+
+        val newBuffer = ByteBuffer.allocateDirect(requiredCapacity * 2)
+        currentBuffer.flip()
+        newBuffer.put(currentBuffer)
+
+        return newBuffer
+    }
+
+    private fun ensureCapacity(currentBuffer: ByteArray, requiredCapacity: Int): ByteArray {
+        if (currentBuffer.size >= requiredCapacity) {
+            return currentBuffer
+        }
+
+        return ByteArray(requiredCapacity * 2)
     }
 }
-
