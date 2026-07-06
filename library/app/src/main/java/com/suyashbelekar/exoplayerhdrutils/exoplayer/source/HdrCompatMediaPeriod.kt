@@ -13,6 +13,21 @@ class HdrCompatMediaPeriod(
     private val transformStrategy: TransformStrategy
 ) : MediaPeriod by delegate {
 
+    // To prevent leak of delegate
+    override fun prepare(callback: MediaPeriod.Callback, positionUs: Long) {
+        delegate.prepare(object : MediaPeriod.Callback {
+
+            override fun onPrepared(mediaPeriod: MediaPeriod) {
+                callback.onPrepared(this@HdrCompatMediaPeriod)
+            }
+
+            override fun onContinueLoadingRequested(source: MediaPeriod) {
+                callback.onContinueLoadingRequested(this@HdrCompatMediaPeriod)
+            }
+
+        }, positionUs)
+    }
+
     override fun selectTracks(
         selections: Array<ExoTrackSelection?>,
         mayRetainStreamFlags: BooleanArray,
@@ -20,10 +35,19 @@ class HdrCompatMediaPeriod(
         streamResetFlags: BooleanArray,
         positionUs: Long
     ): Long {
+        // Unwrap the delegate sample stream
+        for (i in streams.indices) {
+            val stream = streams[i]
+            if (stream is HdrCompatSampleStream) {
+                streams[i] = stream.delegate
+            }
+        }
+
         val position = delegate.selectTracks(
             selections, mayRetainStreamFlags, streams, streamResetFlags, positionUs
         )
 
+        // Re-wrap the delegate sample stream
         for (i in streams.indices) {
             val stream = streams[i]
             val selection = selections[i]

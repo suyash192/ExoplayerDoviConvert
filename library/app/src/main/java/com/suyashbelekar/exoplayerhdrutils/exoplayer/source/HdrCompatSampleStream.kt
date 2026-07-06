@@ -11,7 +11,7 @@ import java.nio.ByteBuffer
 
 @UnstableApi
 class HdrCompatSampleStream(
-    private val delegate: SampleStream, transformStrategy: TransformStrategy
+    val delegate: SampleStream, transformStrategy: TransformStrategy
 ) : SampleStream by delegate {
     private val videoFrameTransformer = HevcFrameTransformer(transformStrategy)
 
