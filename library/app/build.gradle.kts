@@ -3,12 +3,12 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "0.3.0"
+version = "0.4.0"
 group = "com.suyashbelekar.exoplayerhdrutils"
 
 android {
     namespace = "com.suyashbelekar.exoplayerhdrutils"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 23
