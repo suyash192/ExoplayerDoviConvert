@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-version = "0.4.0"
+version = "0.4.1"
 group = "com.suyashbelekar.exoplayerhdrutils"
 
 android {
@@ -27,9 +27,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-
-    implementation(libs.androidx.media3.exoplayer)
+    api(libs.androidx.media3.exoplayer)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.runner)

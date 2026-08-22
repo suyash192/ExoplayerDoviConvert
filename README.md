@@ -55,7 +55,6 @@ HdrCompatMediaSourceFactory(existingMediaSourceFactory, transformStrategy)
 ## Prerequisites & Compatibility
 
 - **Minimum SDK:** 23
-- **Media3 Version:** 1.10.1
 - **Architecture Support:** arm64-v8a, armeabi-v7a, x86_64
 
 ## Acknowledgments
