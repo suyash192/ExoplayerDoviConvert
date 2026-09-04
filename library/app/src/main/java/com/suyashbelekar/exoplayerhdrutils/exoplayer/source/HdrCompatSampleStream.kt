@@ -1,5 +1,6 @@
 package com.suyashbelekar.exoplayerhdrutils.exoplayer.source
 
+import android.util.Log
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.decoder.DecoderInputBuffer
@@ -20,7 +21,24 @@ class HdrCompatSampleStream(
     ): Int {
         val result = delegate.readData(formatHolder, buffer, readFlags)
 
-        if (result == C.RESULT_BUFFER_READ && !buffer.isEndOfStream) {
+        if (result == C.RESULT_FORMAT_READ) {
+            // If it is dovi p7 format, change it to dovi p8
+            val format = formatHolder.format
+            val codecs = format?.codecs
+
+            Log.i(TAG, "Received codecs from video: $codecs")
+
+            if (format != null && codecs != null && codecs.contains(".07.")) {
+                Log.i(TAG, "Changing dovi P7 codec to dovi P8 codec")
+
+                val p8Codecs = codecs.replace(".07.", ".08.")
+                formatHolder.format = format.buildUpon()
+                    .setCodecs(p8Codecs)
+                    .build()
+
+                Log.i(TAG, "New codecs: $p8Codecs")
+            }
+        } else if (result == C.RESULT_BUFFER_READ && !buffer.isEndOfStream) {
             onBuffer(buffer)
         }
 
@@ -41,5 +59,9 @@ class HdrCompatSampleStream(
         val newSize = videoFrameTransformer.transformFrame(newByteBuffer, frameSize)
 
         byteBuffer.position(newSize)
+    }
+
+    companion object {
+        val TAG = HdrCompatSampleStream::class.simpleName
     }
 }
